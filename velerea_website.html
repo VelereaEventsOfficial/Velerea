@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velerea — Escape. Celebrate. Experience.</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Montserrat:wght@200;300;400;500&family=Raleway:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --orange: #CC5500;
+    --burgundy: #6D1A36;
+    --cream: #F5F0E8;
+    --navy: #0A0A0F;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--navy); color:var(--cream); font-family:'Montserrat',sans-serif; overflow-x:hidden; cursor:none; }
+
+  .cursor { width:10px; height:10px; border-radius:50%; background:var(--gold); position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); box-shadow:0 0 12px var(--gold); }
+  .cursor-ring { width:34px; height:34px; border-radius:50%; border:1px solid rgba(201,168,76,0.4); position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all 0.15s ease; }
+
+  .bokeh-global { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+  .bk { position:absolute; border-radius:50%; filter:blur(55px); animation:bkFloat linear infinite; }
+  @keyframes bkFloat { 0%{opacity:0;transform:scale(0.9)} 25%{opacity:1} 75%{opacity:0.5} 100%{opacity:0;transform:scale(1.1) translateY(-20px)} }
+
+  /* NAV */
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:24px 60px; background:linear-gradient(to bottom,rgba(10,10,15,0.95),transparent); }
+  .nav-logo { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; color:var(--gold); letter-spacing:6px; text-shadow:0 0 20px rgba(201,168,76,0.5); }
+  .nav-links { display:flex; gap:36px; list-style:none; }
+  .nav-links a { color:rgba(245,240,232,0.65); text-decoration:none; font-size:10px; letter-spacing:3px; text-transform:uppercase; font-weight:300; transition:color 0.3s; }
+  .nav-links a:hover { color:var(--gold); }
+  .nav-cta { padding:10px 26px; border:1px solid var(--gold); color:var(--gold) !important; transition:all 0.3s !important; }
+  .nav-cta:hover { background:var(--gold) !important; color:var(--navy) !important; }
+
+  /* HERO */
+  #hero { position:relative; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; overflow:hidden; }
+  .hero-bg { position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,0.09) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 15% 85%,rgba(204,85,0,0.13) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 85% 15%,rgba(109,26,54,0.15) 0%,transparent 60%); }
+  .hero-stars { color:var(--gold); font-size:15px; letter-spacing:14px; margin-bottom:28px; text-shadow:0 0 10px var(--gold); opacity:0; animation:fadeUp 1s ease 0.3s forwards,starPulse 3s ease-in-out 1.3s infinite; }
+  @keyframes starPulse { 0%,100%{text-shadow:0 0 8px var(--gold)} 50%{text-shadow:0 0 22px var(--gold),0 0 45px rgba(201,168,76,0.5)} }
+  .hero-line { width:260px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:18px auto; box-shadow:0 0 8px rgba(201,168,76,0.35); opacity:0; animation:fadeIn 1s ease 0.8s forwards; }
+  .hero-title { font-family:'Cormorant Garamond',serif; font-size:clamp(88px,13vw,155px); font-weight:600; letter-spacing:18px; color:var(--gold); text-transform:uppercase; line-height:0.9; opacity:0; animation:fadeUp 1.2s ease 0.5s forwards; text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 80px rgba(201,168,76,0.3),0 0 130px rgba(201,168,76,0.1); }
+  .hero-slogan { font-family:'Montserrat',sans-serif; font-weight:200; font-size:12px; letter-spacing:6px; color:rgba(245,240,232,0.85); text-transform:uppercase; opacity:0; animation:fadeUp 1s ease 1s forwards; margin-top:6px; }
+  .hero-sub { margin-top:46px; font-size:11px; letter-spacing:3px; color:rgba(245,240,232,0.4); text-transform:uppercase; opacity:0; animation:fadeUp 1s ease 1.4s forwards; }
+  .hero-btn { display:inline-block; margin-top:18px; padding:15px 48px; border:1px solid var(--gold); color:var(--gold); text-decoration:none; font-size:10px; letter-spacing:4px; text-transform:uppercase; font-family:'Montserrat',sans-serif; font-weight:300; transition:all 0.4s; opacity:0; animation:fadeUp 1s ease 1.6s forwards; position:relative; overflow:hidden; }
+  .hero-btn::before { content:''; position:absolute; inset:0; background:var(--gold); transform:translateX(-100%); transition:transform 0.4s ease; z-index:-1; }
+  .hero-btn:hover { color:var(--navy); }
+  .hero-btn:hover::before { transform:translateX(0); }
+  .scroll-ind { position:absolute; bottom:36px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; opacity:0; animation:fadeIn 1s ease 2.5s forwards; }
+  .scroll-ind span { font-size:9px; letter-spacing:4px; color:rgba(245,240,232,0.28); text-transform:uppercase; }
+  .scroll-line { width:1px; height:46px; background:linear-gradient(to bottom,var(--gold),transparent); animation:scrollA 2s ease-in-out infinite; }
+  @keyframes scrollA { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+  section { position:relative; z-index:1; }
+  .section-label { font-size:10px; letter-spacing:6px; color:var(--gold); text-transform:uppercase; margin-bottom:14px; font-weight:300; }
+  .gold-line { width:55px; height:1px; background:var(--gold); margin:18px auto; box-shadow:0 0 6px rgba(201,168,76,0.45); }
+
+  /* ABOUT */
+  #about { padding:130px 60px; max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:90px; align-items:center; }
+  .about-left h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(44px,5vw,70px); font-weight:400; line-height:1.1; color:var(--cream); margin-bottom:28px; }
+  .about-left h2 em { color:var(--gold); font-style:italic; }
+  .about-left p { font-size:13px; line-height:1.95; color:rgba(245,240,232,0.6); font-weight:300; margin-bottom:18px; }
+  .about-right { display:grid; grid-template-columns:1fr 1fr; gap:2px; }
+  .about-card { background:rgba(201,168,76,0.04); border:1px solid rgba(201,168,76,0.12); padding:38px 28px; text-align:center; transition:all 0.4s; }
+  .about-card:hover { background:rgba(201,168,76,0.09); border-color:rgba(201,168,76,0.3); transform:translateY(-4px); }
+  .about-card .num { font-family:'Cormorant Garamond',serif; font-size:50px; color:var(--gold); font-weight:300; line-height:1; margin-bottom:8px; }
+  .about-card .desc { font-size:9px; letter-spacing:3px; color:rgba(245,240,232,0.45); text-transform:uppercase; }
+
+  /* EVENTS */
+  #events { padding:130px 60px; text-align:center; background:linear-gradient(to bottom,transparent,rgba(201,168,76,0.03),transparent); }
+  #events h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(40px,5vw,62px); font-weight:400; color:var(--cream); margin-bottom:65px; }
+  #events h2 em { color:var(--gold); font-style:italic; }
+  .events-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; max-width:1200px; margin:0 auto; }
+  .event-card { position:relative; padding:55px 38px; background:rgba(255,255,255,0.02); border:1px solid rgba(201,168,76,0.1); text-align:left; overflow:hidden; transition:all 0.4s; }
+  .event-card::before { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); transform:scaleX(0); transition:transform 0.4s; }
+  .event-card:hover { background:rgba(201,168,76,0.05); transform:translateY(-5px); }
+  .event-card:hover::before { transform:scaleX(1); }
+  .event-icon { font-size:30px; margin-bottom:22px; display:block; }
+  .event-card h3 { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:400; color:var(--gold); margin-bottom:12px; }
+  .event-card p { font-size:12px; line-height:1.85; color:rgba(245,240,232,0.52); font-weight:300; }
+  .event-num { position:absolute; top:28px; right:28px; font-family:'Cormorant Garamond',serif; font-size:60px; color:rgba(201,168,76,0.055); font-weight:700; line-height:1; }
+
+  /* EXPERIENCE */
+  #experience { padding:130px 60px; max-width:1200px; margin:0 auto; }
+  .exp-header { text-align:center; margin-bottom:75px; }
+  .exp-header h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(40px,5vw,62px); font-weight:400; color:var(--cream); }
+  .exp-header h2 em { color:var(--gold); font-style:italic; }
+  .features { display:grid; grid-template-columns:repeat(4,1fr); gap:36px; }
+  .feature { text-align:center; padding:38px 18px; border-top:1px solid rgba(201,168,76,0.18); transition:border-top-color 0.3s; }
+  .feature:hover { border-top-color:var(--gold); }
+  .feature-icon { font-size:26px; margin-bottom:18px; display:block; }
+  .feature h4 { font-family:'Cormorant Garamond',serif; font-size:21px; color:var(--gold); margin-bottom:10px; font-weight:400; }
+  .feature p { font-size:12px; line-height:1.82; color:rgba(245,240,232,0.48); font-weight:300; }
+
+  /* GALLERY */
+  #gallery { padding:130px 0; text-align:center; }
+  #gallery h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(40px,5vw,62px); font-weight:400; color:var(--cream); margin-bottom:55px; padding:0 60px; }
+  #gallery h2 em { color:var(--gold); font-style:italic; }
+  .gallery-strip { display:flex; gap:2px; }
+  .gallery-item { flex:1; height:400px; background:rgba(201,168,76,0.04); border:1px solid rgba(201,168,76,0.09); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px; transition:flex 0.5s ease,background 0.4s; cursor:pointer; position:relative; overflow:hidden; }
+  .gallery-item:hover { flex:2.5; background:rgba(201,168,76,0.08); }
+  .gallery-item .gi-label { font-family:'Cormorant Garamond',serif; font-size:21px; color:var(--gold); font-weight:400; letter-spacing:3px; opacity:0; transform:translateY(10px); transition:all 0.4s ease 0.1s; }
+  .gallery-item .gi-sub { font-size:9px; letter-spacing:4px; color:rgba(245,240,232,0.38); text-transform:uppercase; opacity:0; transform:translateY(10px); transition:all 0.4s ease 0.2s; }
+  .gallery-item:hover .gi-label,.gallery-item:hover .gi-sub { opacity:1; transform:translateY(0); }
+  .gallery-item .gi-glow { position:absolute; inset:0; background:radial-gradient(circle at center,rgba(201,168,76,0.1),transparent 70%); opacity:0; transition:opacity 0.4s; }
+  .gallery-item:hover .gi-glow { opacity:1; }
+
+  /* CONTACT */
+  #contact { padding:130px 60px; text-align:center; background:linear-gradient(to bottom,transparent,rgba(201,168,76,0.04),transparent); }
+  #contact h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(46px,6vw,78px); font-weight:300; color:var(--cream); margin-bottom:14px; line-height:1.1; }
+  #contact h2 em { color:var(--gold); font-style:italic; }
+  #contact > p { font-size:12px; letter-spacing:2px; color:rgba(245,240,232,0.45); margin-bottom:55px; font-weight:300; }
+  .contact-form { max-width:580px; margin:0 auto; display:flex; flex-direction:column; gap:14px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .contact-form input,.contact-form select,.contact-form textarea { background:rgba(255,255,255,0.03); border:1px solid rgba(201,168,76,0.18); color:var(--cream); padding:15px 18px; font-family:'Montserrat',sans-serif; font-size:11px; letter-spacing:1px; font-weight:300; outline:none; transition:border-color 0.3s; width:100%; }
+  .contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus { border-color:var(--gold); }
+  .contact-form select option { background:#0A0A0F; }
+  .contact-form textarea { resize:none; height:110px; }
+  .submit-btn { padding:17px; background:transparent; border:1px solid var(--gold); color:var(--gold); font-family:'Montserrat',sans-serif; font-size:10px; letter-spacing:4px; text-transform:uppercase; cursor:pointer; transition:all 0.4s; position:relative; overflow:hidden; }
+  .submit-btn::before { content:''; position:absolute; inset:0; background:var(--gold); transform:translateX(-100%); transition:transform 0.4s; z-index:0; }
+  .submit-btn span { position:relative; z-index:1; }
+  .submit-btn:hover { color:var(--navy); }
+  .submit-btn:hover::before { transform:translateX(0); }
+  .contact-info { display:flex; justify-content:center; gap:55px; margin-top:75px; flex-wrap:wrap; }
+  .contact-item .ci-label { font-size:9px; letter-spacing:4px; color:var(--gold); text-transform:uppercase; margin-bottom:7px; }
+  .contact-item .ci-val { font-family:'Cormorant Garamond',serif; font-size:17px; color:rgba(245,240,232,0.78); font-weight:300; }
+
+  /* FOOTER */
+  footer { padding:55px 60px; border-top:1px solid rgba(201,168,76,0.1); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; }
+  .footer-logo { font-family:'Cormorant Garamond',serif; font-size:22px; color:var(--gold); letter-spacing:6px; text-shadow:0 0 15px rgba(201,168,76,0.4); }
+  .footer-slogan { font-size:9px; letter-spacing:3px; color:rgba(245,240,232,0.28); text-transform:uppercase; text-align:center; }
+  .footer-links { display:flex; gap:28px; }
+  .footer-links a { font-size:9px; letter-spacing:2px; color:rgba(245,240,232,0.38); text-decoration:none; text-transform:uppercase; transition:color 0.3s; }
+  .footer-links a:hover { color:var(--gold); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  .reveal { opacity:0; transform:translateY(36px); transition:opacity 0.85s ease,transform 0.85s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  @media(max-width:900px) {
+    nav { padding:18px 24px; }
+    .nav-links { display:none; }
+    #about { grid-template-columns:1fr; gap:50px; padding:80px 24px; }
+    #events { padding:80px 24px; }
+    .events-grid { grid-template-columns:1fr; }
+    .features { grid-template-columns:1fr 1fr; gap:18px; }
+    #contact { padding:80px 24px; }
+    .form-row { grid-template-columns:1fr; }
+    footer { padding:36px 24px; flex-direction:column; text-align:center; }
+    .gallery-strip { flex-direction:column; }
+    .gallery-item { height:180px; flex:none !important; }
+    #experience { padding:80px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="bokeh-global" id="bokeh"></div>
+
+<nav>
+  <div class="nav-logo">Velerea</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-stars">★ ★ ★ ★ ★</div>
+  <div class="hero-line"></div>
+  <h1 class="hero-title">Velerea</h1>
+  <div class="hero-line"></div>
+  <p class="hero-slogan">Escape. Celebrate. Experience.</p>
+  <p class="hero-sub">Texas' Premier Event Center</p>
+  <a href="#contact" class="hero-btn">Reserve Your Date</a>
+  <div class="scroll-ind">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="about-left reveal">
+    <p class="section-label">★ Our Story</p>
+    <h2>Where <em>Texas</em> Meets <em>Luxury</em></h2>
+    <p>Velerea is more than an event center — it's a destination. Born in the heart of Texas with a spirit as grand as the Lone Star State itself, we bring bold energy, warm hospitality, and unforgettable elegance together under one roof.</p>
+    <p>Every event we host is treated as a once-in-a-lifetime occasion, because for our guests, it is. From intimate gatherings to grand galas, we craft experiences that linger long after the night ends.</p>
+  </div>
+  <div class="about-right reveal">
+    <div class="about-card"><div class="num">10K+</div><div class="desc">Events Hosted</div></div>
+    <div class="about-card"><div class="num">500+</div><div class="desc">Guest Capacity</div></div>
+    <div class="about-card"><div class="num">15+</div><div class="desc">Years of Excellence</div></div>
+    <div class="about-card"><div class="num">★★★★★</div><div class="desc">5-Star Rated</div></div>
+  </div>
+</section>
+
+<section id="events">
+  <p class="section-label reveal">★ What We Host</p>
+  <h2 class="reveal">Every <em>Occasion</em>, Elevated</h2>
+  <div class="gold-line reveal"></div>
+  <div class="events-grid">
+    <div class="event-card reveal"><span class="event-num">01</span><span class="event-icon">💍</span><h3>Weddings & Receptions</h3><p>Your perfect day deserves a perfect setting. From intimate ceremonies to grand receptions, we create the backdrop for your forever.</p></div>
+    <div class="event-card reveal"><span class="event-num">02</span><span class="event-icon">🎉</span><h3>Private Celebrations</h3><p>Birthdays, quinceañeras, anniversaries — every milestone gets the royal treatment it deserves.</p></div>
+    <div class="event-card reveal"><span class="event-num">03</span><span class="event-icon">🤝</span><h3>Corporate Events</h3><p>Conferences, galas, award ceremonies elevated to an experience your team will talk about for years.</p></div>
+    <div class="event-card reveal"><span class="event-num">04</span><span class="event-icon">🎭</span><h3>Cultural Celebrations</h3><p>We honor every tradition with the respect and grandeur it deserves — from Indian weddings to Texan barn dances.</p></div>
+    <div class="event-card reveal"><span class="event-num">05</span><span class="event-icon">🎪</span><h3>Galas & Fundraisers</h3><p>Make your cause unforgettable. Our space transforms into a stunning venue that inspires generosity and community.</p></div>
+    <div class="event-card reveal"><span class="event-num">06</span><span class="event-icon">🌟</span><h3>Social Events</h3><p>Baby showers, bridal showers, holiday parties, reunions — any reason to gather is a reason to celebrate.</p></div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="exp-header reveal">
+    <p class="section-label">★ The Velerea Difference</p>
+    <h2>The <em>Experience</em></h2>
+    <div class="gold-line"></div>
+  </div>
+  <div class="features">
+    <div class="feature reveal"><span class="feature-icon">✨</span><h4>Luxury Ambiance</h4><p>State-of-the-art lighting, dramatic décor, and an atmosphere that takes your breath away from the moment you walk in.</p></div>
+    <div class="feature reveal"><span class="feature-icon">🍽️</span><h4>World-Class Catering</h4><p>From Texas BBQ to international cuisine, our culinary team crafts menus that delight every palate.</p></div>
+    <div class="feature reveal"><span class="feature-icon">🎵</span><h4>Premium Sound & AV</h4><p>Professional-grade audio, visual, and lighting systems that set the perfect mood for every moment.</p></div>
+    <div class="feature reveal"><span class="feature-icon">👑</span><h4>Full-Service Planning</h4><p>Our dedicated event coordinators handle every detail so you can be fully present and enjoy every moment.</p></div>
+  </div>
+</section>
+
+<section id="gallery">
+  <h2 class="reveal">Our <em>Space</em></h2>
+  <div class="gallery-strip">
+    <div class="gallery-item"><div class="gi-glow"></div><span class="gi-label">The Grand Hall</span><span class="gi-sub">Up to 500 guests</span></div>
+    <div class="gallery-item"><div class="gi-glow"></div><span class="gi-label">The Terrace</span><span class="gi-sub">Outdoor elegance</span></div>
+    <div class="gallery-item"><div class="gi-glow"></div><span class="gi-label">The Lounge</span><span class="gi-sub">Intimate gatherings</span></div>
+    <div class="gallery-item"><div class="gi-glow"></div><span class="gi-label">The Ballroom</span><span class="gi-sub">Black tie ready</span></div>
+    <div class="gallery-item"><div class="gi-glow"></div><span class="gi-label">The Garden</span><span class="gi-sub">Nature & luxury</span></div>
+  </div>
+</section>
+
+<section id="contact">
+  <p class="section-label reveal">★ Let's Make It Happen</p>
+  <h2 class="reveal">Book Your <em>Dream</em> Event</h2>
+  <p class="reveal">Reserve your date and let us take care of the rest</p>
+  <form class="contact-form reveal" onsubmit="return false;">
+    <div class="form-row">
+      <input type="text" placeholder="Your Name">
+      <input type="email" placeholder="Email Address">
+    </div>
+    <div class="form-row">
+      <input type="tel" placeholder="Phone Number">
+      <input type="date">
+    </div>
+    <select>
+      <option value="" disabled selected>Type of Event</option>
+      <option>Wedding & Reception</option>
+      <option>Private Celebration</option>
+      <option>Corporate Event</option>
+      <option>Cultural Celebration</option>
+      <option>Gala & Fundraiser</option>
+      <option>Social Event</option>
+      <option>Other</option>
+    </select>
+    <textarea placeholder="Tell us about your vision..."></textarea>
+    <button class="submit-btn"><span>Send Inquiry</span></button>
+  </form>
+  <div class="contact-info reveal">
+    <div class="contact-item"><div class="ci-label">Location</div><div class="ci-val">Texas, USA</div></div>
+    <div class="contact-item"><div class="ci-label">Phone</div><div class="ci-val">(555) 000-0000</div></div>
+    <div class="contact-item"><div class="ci-label">Email</div><div class="ci-val">hello@velerea.com</div></div>
+    <div class="contact-item"><div class="ci-label">Instagram</div><div class="ci-val">@VelereaTX</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Velerea</div>
+  <div class="footer-slogan">Escape. Celebrate. Experience.</div>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="#events">Events</a>
+    <a href="#contact">Contact</a>
+    <a href="#">@VelereaTX</a>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+  });
+  (function animRing(){
+    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  // Bokeh
+  const bokeh=document.getElementById('bokeh');
+  const colors=['#C9A84C','#CC5500','#6D1A36','rgba(245,240,232,0.25)'];
+  for(let i=0;i<16;i++){
+    const b=document.createElement('div');
+    b.className='bk';
+    const s=80+Math.random()*170;
+    b.style.cssText=`width:${s}px;height:${s}px;background:${colors[Math.floor(Math.random()*colors.length)]};top:${Math.random()*100}%;left:${Math.random()*100}%;filter:blur(${40+Math.random()*50}px);animation-duration:${4+Math.random()*6}s;animation-delay:${Math.random()*5}s;`;
+    bokeh.appendChild(b);
+  }
+
+  // Scroll reveal
+  const reveals=document.querySelectorAll('.reveal');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),i*70);
+    });
+  },{threshold:0.1});
+  reveals.forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>
